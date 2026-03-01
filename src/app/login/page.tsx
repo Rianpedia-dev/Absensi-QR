@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { Loader2, ShieldCheck, Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
+import { Loader2, QrCode, Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginPage() {
@@ -57,10 +57,10 @@ export default function LoginPage() {
                         animate={{ scale: 1 }}
                         className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary text-white shadow-2xl shadow-primary/40 mb-4"
                     >
-                        <ShieldCheck className="w-8 h-8" />
+                        <QrCode className="w-8 h-8" />
                     </motion.div>
-                    <h1 className="text-4xl font-black tracking-tighter italic">
-                        RIAN<span className="text-primary not-italic">PEDIA</span>
+                    <h1 className="text-3xl font-black tracking-tighter uppercase italic">
+                        Absensi <span className="text-primary not-italic">Berbasis QR</span>
                     </h1>
                     <p className="text-muted-foreground font-bold text-[10px] uppercase tracking-[0.4em] mt-1 opacity-50">Secure Attendance System</p>
                 </div>
@@ -145,7 +145,7 @@ export default function LoginPage() {
                 </Card>
 
                 <p className="text-center mt-12 text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.5em]">
-                    © 2026 Rianpedia Corp v2.0
+                    © 2026 Absensi-QR v2.0
                 </p>
             </motion.div>
         </div>

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rianpedia Absensi QR",
+  title: "Absensi-QR",
   description: "Sistem Absensi QR Modern dan Premium",
 };
 

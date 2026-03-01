@@ -50,7 +50,9 @@ export function AppSidebar() {
     return (
         <Sidebar>
             <SidebarHeader className="p-4">
-                <h2 className="text-xl font-bold text-primary">AbsensiQR Admin</h2>
+                <h2 className="text-xl font-black tracking-tighter italic">
+                    ABSENSI <span className="text-primary not-italic">ADMIN</span>
+                </h2>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>

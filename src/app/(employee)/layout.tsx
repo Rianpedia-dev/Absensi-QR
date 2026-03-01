@@ -21,7 +21,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
             {/* Header */}
             <header className="sticky top-0 z-10 glass-card bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md border-b border-white/10 px-6 h-16 flex items-center justify-between shadow-sm">
                 <h1 className="text-xl font-black tracking-tighter italic">
-                    RIAN<span className="text-primary not-italic">PEDIA</span>
+                    ABSENSI <span className="text-primary not-italic">QR</span>
                 </h1>
                 <div className="flex items-center gap-3">
                     <ModeToggle />

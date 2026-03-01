@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { Loader2, UserPlus, Mail, Lock, User, ArrowRight, ShieldCheck } from "lucide-react";
+import { Loader2, QrCode, Mail, Lock, User, ArrowRight, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function RegisterPage() {
@@ -54,10 +54,10 @@ export default function RegisterPage() {
                         animate={{ scale: 1 }}
                         className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary text-white shadow-2xl shadow-primary/40 mb-4"
                     >
-                        <UserPlus className="w-8 h-8" />
+                        <QrCode className="w-8 h-8" />
                     </motion.div>
-                    <h1 className="text-4xl font-black tracking-tighter italic">
-                        JOIN<span className="text-primary not-italic">PEDIA</span>
+                    <h1 className="text-3xl font-black tracking-tighter uppercase italic">
+                        Absensi <span className="text-primary not-italic">Berbasis QR</span>
                     </h1>
                     <p className="text-muted-foreground font-bold text-[10px] uppercase tracking-[0.4em] mt-1 opacity-50">Create Employee Account</p>
                 </div>
@@ -67,7 +67,7 @@ export default function RegisterPage() {
 
                     <CardHeader className="text-center pb-8 pt-6">
                         <CardTitle className="text-2xl font-black italic">REGISTRATION</CardTitle>
-                        <CardDescription className="font-medium text-xs">Mulai perjalanan Anda di ekosistem Rianpedia.</CardDescription>
+                        <CardDescription className="font-medium text-xs">Mulai perjalanan Anda di sistem Absensi-QR.</CardDescription>
                     </CardHeader>
 
                     <CardContent>
