@@ -127,27 +127,20 @@ export default function ScanPage() {
                             <div id="reader" className="w-full h-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full sm:[&_video]:rounded-none" />
 
                             {/* Professional Scan Overlay */}
-                            <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10">
+                            <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-20">
                                 <div className="relative w-[260px] h-[260px]">
-                                    {/* Corners */}
-                                    <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-xl shadow-[0_0_15px_rgba(var(--primary),0.3)]" />
-                                    <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-xl shadow-[0_0_15px_rgba(var(--primary),0.3)]" />
-                                    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-xl shadow-[0_0_15px_rgba(var(--primary),0.3)]" />
-                                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-xl shadow-[0_0_15px_rgba(var(--primary),0.3)]" />
+                                    {/* Corners - Refined Blue Style */}
+                                    <div className="absolute top-0 left-0 w-10 h-10 border-t-[6px] border-l-[6px] border-primary rounded-tl-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
+                                    <div className="absolute top-0 right-0 w-10 h-10 border-t-[6px] border-r-[6px] border-primary rounded-tr-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
+                                    <div className="absolute bottom-0 left-0 w-10 h-10 border-b-[6px] border-l-[6px] border-primary rounded-bl-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
+                                    <div className="absolute bottom-0 right-0 w-10 h-10 border-b-[6px] border-r-[6px] border-primary rounded-br-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
 
                                     {/* Scanning Bar */}
                                     <motion.div
                                         animate={{ top: ['10%', '90%', '10%'] }}
-                                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                        className="absolute left-[5%] right-[5%] h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_10px_#6366f1]"
+                                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute left-[5%] right-[5%] h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_#6366f1]"
                                     />
-
-                                    <div className="absolute inset-x-0 bottom-[-40px] flex justify-center">
-                                        <div className="bg-black/40 backdrop-blur-md text-white border border-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
-                                            <ScanLine className="w-3 h-3 text-primary" />
-                                            Scanning Active
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -253,7 +246,8 @@ export default function ScanPage() {
         }
         #reader a { display: none !important; }
         #reader { border: none !important; background: transparent !important; }
-        #reader__scan_region { display: flex; justify-content: center; }
+        #reader__scan_region svg { display: none !important; }  /* Hide the default white corners */
+        #reader__scan_region { display: flex; justify-content: center; position: relative; }
         #reader__dashboard { display: flex; flex-direction: column; align-items: center; padding: 20px !important; }
       `}} />
         </div>
