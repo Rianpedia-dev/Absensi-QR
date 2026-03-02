@@ -25,7 +25,10 @@ export default function ScanPage() {
                     fps: 15,
                     qrbox: { width: 260, height: 260 },
                     supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-                    rememberLastUsedCamera: true
+                    rememberLastUsedCamera: true,
+                    videoConstraints: {
+                        facingMode: "environment"
+                    }
                 },
                 false
             );

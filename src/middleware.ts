@@ -15,8 +15,8 @@ export async function middleware(request: NextRequest) {
     );
 
     const isAdminRoute = ["/dashboard", "/qr", "/employees", "/reports"].some(route => request.nextUrl.pathname.startsWith(route));
-    const isEmployeeRoute = ["/scan", "/history"].some(route => request.nextUrl.pathname.startsWith(route));
-    const isAuthRoute = ["/login", "/register"].some(route => request.nextUrl.pathname.startsWith(route));
+    const isEmployeeRoute = ["/scan", "/history", "/profile"].some(route => request.nextUrl.pathname.startsWith(route));
+    const isAuthRoute = ["/login"].some(route => request.nextUrl.pathname.startsWith(route));
 
     const session = sessionData as unknown as { user: { role: string; id: string; email: string } } | null;
 
@@ -47,5 +47,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/dashboard/:path*", "/qr/:path*", "/employees/:path*", "/reports/:path*", "/scan/:path*", "/history/:path*", "/login", "/register"],
+    matcher: ["/dashboard/:path*", "/qr/:path*", "/employees/:path*", "/reports/:path*", "/scan/:path*", "/history/:path*", "/profile/:path*", "/login"],
 };

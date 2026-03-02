@@ -38,6 +38,35 @@ export async function createEmployee(data: { name: string; email: string; passwo
     }
 }
 
+export async function updateEmployee(id: string, data: { name: string; email: string }) {
+    try {
+        await db.update(user).set({
+            name: data.name,
+            email: data.email,
+            updatedAt: new Date(),
+        }).where(eq(user.id, id));
+        revalidatePath("/employees");
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message || "Gagal mengupdate karyawan" };
+    }
+}
+
+export async function resetPassword(id: string) {
+    try {
+        await auth.api.setUserPassword({
+            body: {
+                userId: id,
+                newPassword: "karyawanpassword",
+            },
+        });
+        revalidatePath("/employees");
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message || "Gagal mereset password" };
+    }
+}
+
 export async function deleteEmployee(id: string) {
     try {
         await db.delete(user).where(eq(user.id, id));

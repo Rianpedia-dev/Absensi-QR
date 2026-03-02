@@ -1,21 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, Loader2, Search, UserPlus, Mail, Calendar as CalendarIcon, Shield } from "lucide-react";
-import { getEmployees, createEmployee, deleteEmployee } from "./actions";
+import { Plus, Trash2, Loader2, Search, UserPlus, Mail, Calendar as CalendarIcon, Shield, Pencil, KeyRound } from "lucide-react";
+import { getEmployees, createEmployee, updateEmployee, deleteEmployee, resetPassword } from "./actions";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function EmployeesPage() {
     const [employees, setEmployees] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isAddOpen, setIsAddOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
     const [search, setSearch] = useState("");
 
     // Form add
@@ -23,6 +24,12 @@ export default function EmployeesPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Form edit
+    const [editId, setEditId] = useState("");
+    const [editName, setEditName] = useState("");
+    const [editEmail, setEditEmail] = useState("");
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const fetchEmployees = async () => {
         setLoading(true);
@@ -49,6 +56,38 @@ export default function EmployeesPage() {
             fetchEmployees();
         } else {
             alert(res.error);
+        }
+    };
+
+    const openEdit = (emp: any) => {
+        setEditId(emp.id);
+        setEditName(emp.name);
+        setEditEmail(emp.email);
+        setIsEditOpen(true);
+    };
+
+    const handleEdit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsUpdating(true);
+        const res = await updateEmployee(editId, { name: editName, email: editEmail });
+        setIsUpdating(false);
+
+        if (res.success) {
+            setIsEditOpen(false);
+            fetchEmployees();
+        } else {
+            alert(res.error);
+        }
+    };
+
+    const handleResetPassword = async (id: string, name: string) => {
+        if (confirm(`Reset password ${name} menjadi "karyawanpassword"?`)) {
+            const res = await resetPassword(id);
+            if (res.success) {
+                alert(`Password ${name} berhasil direset.`);
+            } else {
+                alert(res.error || "Gagal mereset password.");
+            }
         }
     };
 
@@ -109,6 +148,31 @@ export default function EmployeesPage() {
                     </DialogContent>
                 </Dialog>
             </div>
+
+            {/* Edit Dialog */}
+            <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+                <DialogContent className="glass-card border-white/10 sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-black italic">EDIT KARYAWAN</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleEdit} className="space-y-6 py-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="editName" className="text-[10px] font-black uppercase tracking-widest opacity-50">Full Name</Label>
+                            <Input id="editName" required value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Jane Doe" className="bg-white/5 border-white/10 h-12 rounded-xl" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="editEmail" className="text-[10px] font-black uppercase tracking-widest opacity-50">Work Email</Label>
+                            <Input id="editEmail" type="email" required value={editEmail} onChange={(e) => setEditEmail(e.target.value)} placeholder="jane@kantor.com" className="bg-white/5 border-white/10 h-12 rounded-xl" />
+                        </div>
+                        <DialogFooter className="gap-2 sm:gap-0">
+                            <Button type="button" variant="ghost" onClick={() => setIsEditOpen(false)} className="font-bold">BATAL</Button>
+                            <Button type="submit" disabled={isUpdating} className="font-black rounded-xl px-8">
+                                {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "SIMPAN PERUBAHAN"}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
 
             <Card className="glass-card border-0 shadow-2xl overflow-hidden">
                 <CardHeader className="bg-muted/30 border-b py-4">
@@ -196,14 +260,34 @@ export default function EmployeesPage() {
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="py-5 text-right">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        onClick={() => handleDelete(emp.id)}
-                                                        className="h-10 w-10 rounded-xl text-rose-500 hover:text-white hover:bg-rose-500 transition-all shadow-sm active:scale-90"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => openEdit(emp)}
+                                                            className="h-10 w-10 rounded-xl text-amber-500 hover:text-white hover:bg-amber-500 transition-all shadow-sm active:scale-90"
+                                                            title="Edit Karyawan"
+                                                        >
+                                                            <Pencil className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleResetPassword(emp.id, emp.name)}
+                                                            className="h-10 w-10 rounded-xl text-blue-500 hover:text-white hover:bg-blue-500 transition-all shadow-sm active:scale-90"
+                                                            title="Reset Password"
+                                                        >
+                                                            <KeyRound className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleDelete(emp.id)}
+                                                            className="h-10 w-10 rounded-xl text-rose-500 hover:text-white hover:bg-rose-500 transition-all shadow-sm active:scale-90"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </TableCell>
                                             </motion.tr>
                                         ))
@@ -217,4 +301,3 @@ export default function EmployeesPage() {
         </div>
     );
 }
-

@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { QrCode, ClipboardList, LogOut } from "lucide-react";
+import { QrCode, ClipboardList, LogOut, UserCircle } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -58,6 +58,14 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
                     >
                         <ClipboardList className="w-6 h-6" />
                         <span className="text-xs font-medium">Riwayat</span>
+                    </Link>
+                    <Link
+                        href="/profile"
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${pathname === "/profile" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                            }`}
+                    >
+                        <UserCircle className="w-6 h-6" />
+                        <span className="text-xs font-medium">Profil</span>
                     </Link>
                 </div>
             </nav>

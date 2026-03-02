@@ -7,8 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { Loader2, QrCode, Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
+import { Loader2, QrCode, Mail, Lock, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginPage() {
@@ -129,18 +128,10 @@ export default function LoginPage() {
                         </form>
                     </CardContent>
 
-                    <CardFooter className="flex-col gap-6 pb-8">
-                        <div className="flex items-center gap-2 w-full">
-                            <div className="h-px bg-white/10 flex-1" />
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter px-2">System Entry</span>
-                            <div className="h-px bg-white/10 flex-1" />
-                        </div>
-                        <div className="text-center text-xs text-muted-foreground w-full">
-                            Belum terdaftar?{" "}
-                            <Link href="/register" className="font-black text-primary hover:underline underline-offset-4 transition-all flex items-center justify-center gap-1 mt-1 uppercase tracking-widest">
-                                Register New ID <Sparkles className="w-3 h-3" />
-                            </Link>
-                        </div>
+                    <CardFooter className="pb-8">
+                        <p className="text-center text-[10px] text-muted-foreground opacity-50 w-full">
+                            Hubungi admin untuk pendaftaran akun.
+                        </p>
                     </CardFooter>
                 </Card>
 
