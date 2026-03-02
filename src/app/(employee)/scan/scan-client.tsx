@@ -123,8 +123,8 @@ export default function ScanPage() {
                     </AnimatePresence>
 
                     {!scanResult ? (
-                        <div className="w-full aspect-square relative">
-                            <div id="reader" className="w-full h-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full sm:[&_video]:rounded-none" />
+                        <div className="w-full aspect-square relative bg-zinc-100 dark:bg-zinc-800/50 overflow-hidden">
+                            <div id="reader" className="absolute inset-0 w-full h-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full" />
 
                             {/* Professional Scan Overlay with Spotlight Effect */}
                             <div className="absolute inset-0 z-20 pointer-events-none">
@@ -250,12 +250,49 @@ export default function ScanPage() {
             transform: scale(0.98);
         }
         #reader a { display: none !important; }
-        #reader { border: none !important; background: transparent !important; overflow: hidden; }
+        #reader { border: none !important; background: transparent !important; overflow: hidden !important; width: 100% !important; height: 100% !important; }
         #reader img { display: none !important; } /* Hide the helper images */
-        #reader__scan_region { display: flex; justify-content: center; position: relative; border: none !important; }
+        #reader__scan_region { 
+            display: flex !important; 
+            justify-content: center !important; 
+            align-items: center !important;
+            position: absolute !important; 
+            inset: 0 !important;
+            border: none !important; 
+        }
+        #reader__scan_region video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
         #reader__scan_region svg { display: none !important; }  /* Aggregate SVG removal */
-        #reader__dashboard { display: flex; flex-direction: column; align-items: center; padding: 15px !important; background: transparent !important; }
-        #reader__dashboard_section_csr button { width: auto !important; margin: 10px auto !important; }
+        #reader__dashboard { 
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            display: flex !important; 
+            flex-direction: column !important; 
+            align-items: center !important; 
+            padding: 10px !important; 
+            background: rgba(255, 255, 255, 0.8) !important; 
+            backdrop-filter: blur(4px) !important;
+            z-index: 30 !important;
+        }
+        .dark #reader__dashboard {
+            background: rgba(0, 0, 0, 0.5) !important;
+        }
+        #reader__dashboard_section_csr button { 
+            width: auto !important; 
+            margin: 5px auto !important; 
+            font-size: 10px !important;
+            padding: 8px 16px !important;
+        }
+        #reader__status_span {
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+        }
       `}} />
         </div>
     );
