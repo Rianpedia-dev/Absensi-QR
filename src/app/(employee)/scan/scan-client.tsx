@@ -87,18 +87,17 @@ export default function ScanPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-8 animate-in-fade">
+        <div className="flex flex-col items-center justify-center h-full w-full max-w-sm mx-auto overflow-hidden animate-in-fade">
             <motion.div
-                initial={{ opacity: 0, y: -20 }}
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-8"
+                className="text-center mb-4 mt-2"
             >
-                <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 mb-3 border border-primary/20">
+                <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 mb-2 border border-primary/20">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                     Secure Scanning System
                 </div>
-                <h1 className="text-3xl font-black tracking-tighter">KEHADIRAN <span className="text-primary italic">AI</span></h1>
-                <p className="text-muted-foreground text-xs mt-2 font-medium opacity-70">
+                <p className="text-muted-foreground text-[11px] font-medium opacity-70 px-4">
                     Arahkan kamera ke QR Code Admin untuk konvirmasi absensi otomatis.
                 </p>
             </motion.div>
@@ -227,7 +226,7 @@ export default function ScanPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="mt-10 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 text-center"
+                className="mt-6 text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 text-center"
             >
                 End-to-End Encrypted Verification System
             </motion.p>
