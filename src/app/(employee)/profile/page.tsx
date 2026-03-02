@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+export const dynamic = "force-dynamic";
+
+import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
