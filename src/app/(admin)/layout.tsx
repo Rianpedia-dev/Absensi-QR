@@ -1,9 +1,18 @@
-"use client";
-
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+
+    if (!session || session.user.role !== "ADMIN") {
+        redirect("/login");
+    }
+
     return (
         <SidebarProvider>
             <AppSidebar />
