@@ -126,21 +126,26 @@ export default function ScanPage() {
                         <div className="w-full aspect-square relative">
                             <div id="reader" className="w-full h-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full sm:[&_video]:rounded-none" />
 
-                            {/* Professional Scan Overlay */}
-                            <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-20">
-                                <div className="relative w-[260px] h-[260px]">
-                                    {/* Corners - Refined Blue Style */}
-                                    <div className="absolute top-0 left-0 w-10 h-10 border-t-[6px] border-l-[6px] border-primary rounded-tl-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
-                                    <div className="absolute top-0 right-0 w-10 h-10 border-t-[6px] border-r-[6px] border-primary rounded-tr-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
-                                    <div className="absolute bottom-0 left-0 w-10 h-10 border-b-[6px] border-l-[6px] border-primary rounded-bl-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
-                                    <div className="absolute bottom-0 right-0 w-10 h-10 border-b-[6px] border-r-[6px] border-primary rounded-br-2xl shadow-[0_0_20px_rgba(var(--primary),0.4)]" />
+                            {/* Professional Scan Overlay with Spotlight Effect */}
+                            <div className="absolute inset-0 z-20 pointer-events-none">
+                                {/* Darkened Backdrop with Hole (Spotlight) */}
+                                <div className="absolute inset-0 bg-black/40" style={{ clipPath: 'polygon(0% 0%, 0% 100%, calc(50% - 130px) 100%, calc(50% - 130px) calc(50% - 130px), calc(50% + 130px) calc(50% - 130px), calc(50% + 130px) calc(50% + 130px), calc(50% - 130px) calc(50% + 130px), calc(50% - 130px) 100%, 100% 100%, 100% 0%)' }} />
 
-                                    {/* Scanning Bar */}
-                                    <motion.div
-                                        animate={{ top: ['10%', '90%', '10%'] }}
-                                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                                        className="absolute left-[5%] right-[5%] h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_#6366f1]"
-                                    />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="relative w-[260px] h-[260px]">
+                                        {/* Corners - Refined Blue Style (Matching QR Box Exactly) */}
+                                        <div className="absolute top-0 left-0 w-12 h-12 border-t-[6px] border-l-[6px] border-primary rounded-tl-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+                                        <div className="absolute top-0 right-0 w-12 h-12 border-t-[6px] border-r-[6px] border-primary rounded-tr-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+                                        <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[6px] border-l-[6px] border-primary rounded-bl-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+                                        <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[6px] border-r-[6px] border-primary rounded-br-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+
+                                        {/* Scanning Bar */}
+                                        <motion.div
+                                            animate={{ top: ['8%', '92%', '8%'] }}
+                                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                            className="absolute left-[4%] right-[4%] h-[4px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_#6366f1] rounded-full"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
@@ -245,10 +250,12 @@ export default function ScanPage() {
             transform: scale(0.98);
         }
         #reader a { display: none !important; }
-        #reader { border: none !important; background: transparent !important; }
-        #reader__scan_region svg { display: none !important; }  /* Hide the default white corners */
-        #reader__scan_region { display: flex; justify-content: center; position: relative; }
-        #reader__dashboard { display: flex; flex-direction: column; align-items: center; padding: 20px !important; }
+        #reader { border: none !important; background: transparent !important; overflow: hidden; }
+        #reader img { display: none !important; } /* Hide the helper images */
+        #reader__scan_region { display: flex; justify-content: center; position: relative; border: none !important; }
+        #reader__scan_region svg { display: none !important; }  /* Aggregate SVG removal */
+        #reader__dashboard { display: flex; flex-direction: column; align-items: center; padding: 15px !important; background: transparent !important; }
+        #reader__dashboard_section_csr button { width: auto !important; margin: 10px auto !important; }
       `}} />
         </div>
     );
