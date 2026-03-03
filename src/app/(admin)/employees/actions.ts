@@ -7,12 +7,13 @@ import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export async function getEmployees() {
-    return await db.select().from(user).where(eq(user.role, "EMPLOYEE")).orderBy(desc(user.createdAt));
+    return await db.select().from(user).orderBy(desc(user.createdAt));
 }
 
-export async function createEmployee(data: { name: string; email: string; password?: string }) {
+export async function createEmployee(data: { name: string; email: string; password?: string; role?: string }) {
     try {
         const password = data.password || "password123";
+        const selectedRole = data.role || "EMPLOYEE";
         const baseUrl = process.env.BETTER_AUTH_URL || "http://localhost:3000";
 
         // Use HTTP fetch to call the auth sign-up endpoint
@@ -38,8 +39,8 @@ export async function createEmployee(data: { name: string; email: string; passwo
         }
 
         if (result?.user?.id) {
-            // Set role to EMPLOYEE
-            await db.update(user).set({ role: "EMPLOYEE" }).where(eq(user.id, result.user.id));
+            // Set role based on user selection
+            await db.update(user).set({ role: selectedRole }).where(eq(user.id, result.user.id));
         }
 
         revalidatePath("/employees");
@@ -66,31 +67,23 @@ export async function updateEmployee(id: string, data: { name: string; email: st
 
 export async function resetPassword(id: string) {
     try {
-        const baseUrl = process.env.BETTER_AUTH_URL || "http://localhost:3000";
-        const { cookies } = await import("next/headers");
-        const cookieStore = await cookies();
-        const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join("; ");
+        const { hashPassword } = await import("better-auth/crypto");
+        const { account } = await import("@/lib/db/schema");
+        const { and } = await import("drizzle-orm");
 
-        const response = await fetch(`${baseUrl}/api/auth/admin/set-user-password`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Origin": baseUrl,
-                "Referer": baseUrl,
-                "Cookie": cookieHeader,
-            },
-            body: JSON.stringify({
-                userId: id,
-                newPassword: "karyawanpassword",
-            }),
-        });
+        // Hash password using Better Auth's own hashing function
+        const hashedPassword = await hashPassword("karyawanpassword");
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            console.error("Reset password error:", result);
-            return { success: false, error: result?.message || "Gagal mereset password" };
-        }
+        // Update password directly in the account table
+        await db.update(account).set({
+            password: hashedPassword,
+            updatedAt: new Date(),
+        }).where(
+            and(
+                eq(account.userId, id),
+                eq(account.providerId, "credential")
+            )
+        );
 
         revalidatePath("/employees");
         return { success: true };
@@ -102,10 +95,20 @@ export async function resetPassword(id: string) {
 
 export async function deleteEmployee(id: string) {
     try {
+        const { account, session, attendances } = await import("@/lib/db/schema");
+
+        // Hapus semua data terkait terlebih dahulu (foreign key constraints)
+        await db.delete(attendances).where(eq(attendances.userId, id));
+        await db.delete(session).where(eq(session.userId, id));
+        await db.delete(account).where(eq(account.userId, id));
+
+        // Baru hapus user
         await db.delete(user).where(eq(user.id, id));
+
         revalidatePath("/employees");
         return { success: true };
     } catch (error: any) {
+        console.error("Delete employee error:", error);
         return { success: false, error: "Gagal menghapus karyawan" };
     }
 }

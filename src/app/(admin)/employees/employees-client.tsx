@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Trash2, Loader2, Search, UserPlus, Mail, Calendar as CalendarIcon, Shield, Pencil, KeyRound, Lock } from "lucide-react";
 import { getEmployees, createEmployee, updateEmployee, deleteEmployee, resetPassword } from "./actions";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,6 +27,7 @@ export default function EmployeesPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [role, setRole] = useState("EMPLOYEE");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Form edit
@@ -56,7 +58,7 @@ export default function EmployeesPage() {
             return;
         }
         setIsSubmitting(true);
-        const res = await createEmployee({ name, email, password });
+        const res = await createEmployee({ name, email, password, role });
         setIsSubmitting(false);
 
         if (res.success) {
@@ -65,6 +67,7 @@ export default function EmployeesPage() {
             setEmail("");
             setPassword("");
             setConfirmPassword("");
+            setRole("EMPLOYEE");
             fetchEmployees();
         } else {
             alert(res.error);
@@ -153,6 +156,18 @@ export default function EmployeesPage() {
                             <div className="space-y-2">
                                 <Label htmlFor="confirmPassword" className="text-[10px] font-black uppercase tracking-widest opacity-50">Konfirmasi Password</Label>
                                 <Input id="confirmPassword" type="password" required minLength={8} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Ulangi password" className="bg-white/5 border-white/10 h-12 rounded-xl" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="role" className="text-[10px] font-black uppercase tracking-widest opacity-50">Role</Label>
+                                <Select value={role} onValueChange={setRole}>
+                                    <SelectTrigger className="bg-white/5 border-white/10 h-12 rounded-xl w-full">
+                                        <SelectValue placeholder="Pilih Role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="EMPLOYEE">Employee</SelectItem>
+                                        <SelectItem value="ADMIN">Admin</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <DialogFooter className="gap-2 sm:gap-0">
                                 <Button type="button" variant="ghost" onClick={() => setIsAddOpen(false)} className="font-bold">BATAL</Button>
