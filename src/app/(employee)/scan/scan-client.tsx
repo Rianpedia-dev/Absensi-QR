@@ -12,12 +12,13 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function ScanPage() {
     const [scanResult, setScanResult] = useState<{ success: boolean; type?: string; time?: string; error?: string } | null>(null);
     const [isScanning, setIsScanning] = useState(false);
+    const [isStopped, setIsStopped] = useState(false);
     const [loading, setLoading] = useState(false);
     const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
     useEffect(() => {
-        // Start scanner only if no result is showing
-        if (scanResult) return;
+        // Start scanner only if no result is showing and not manually stopped
+        if (scanResult || isStopped) return;
 
         if (!scannerRef.current) {
             setIsScanning(true);
@@ -57,7 +58,7 @@ export default function ScanPage() {
                 scannerRef.current = null;
             }
         };
-    }, [scanResult]);
+    }, [scanResult, isStopped]);
 
     const handleQrData = async (data: string) => {
         setLoading(true);
@@ -90,8 +91,13 @@ export default function ScanPage() {
         if (scannerRef.current) {
             scannerRef.current.clear().catch(e => console.error("Failed to clear scanner", e));
             scannerRef.current = null;
-            setIsScanning(false);
         }
+        setIsScanning(false);
+        setIsStopped(true);
+    };
+
+    const startScanner = () => {
+        setIsStopped(false);
     };
 
     return (
@@ -158,7 +164,7 @@ export default function ScanPage() {
                                     </div>
                                 </div>
 
-                                {!isScanning && !loading && (
+                                {!isScanning && !loading && !isStopped && (
                                     <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-muted/20 z-10">
                                         <Camera className="w-10 h-10 text-muted-foreground/30 animate-pulse" />
                                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-4 opacity-50 italic">
@@ -166,8 +172,16 @@ export default function ScanPage() {
                                         </p>
                                     </div>
                                 )}
+                                {isStopped && (
+                                    <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm z-10">
+                                        <Camera className="w-12 h-12 text-muted-foreground/40" />
+                                        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mt-3 opacity-60">
+                                            Kamera Dihentikan
+                                        </p>
+                                    </div>
+                                )}
                             </div>
-                            {/* Custom Stop Button - Always visible below camera */}
+                            {/* Custom Buttons - Always visible below camera */}
                             {isScanning && (
                                 <div className="w-full flex justify-center py-4 px-4">
                                     <Button
@@ -177,6 +191,17 @@ export default function ScanPage() {
                                     >
                                         <X className="w-4 h-4 mr-2" />
                                         Stop Scanning
+                                    </Button>
+                                </div>
+                            )}
+                            {isStopped && (
+                                <div className="w-full flex justify-center py-4 px-4">
+                                    <Button
+                                        onClick={startScanner}
+                                        className="w-full font-black uppercase tracking-[0.15em] rounded-xl h-12 text-xs"
+                                    >
+                                        <ScanLine className="w-4 h-4 mr-2" />
+                                        Start Scanning
                                     </Button>
                                 </div>
                             )}
