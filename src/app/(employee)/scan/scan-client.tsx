@@ -87,7 +87,7 @@ export default function ScanPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-full w-full max-w-sm mx-auto animate-in-fade">
+        <div className="flex flex-col items-center justify-start min-h-full w-full max-w-sm mx-auto animate-in-fade pb-10">
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -276,22 +276,30 @@ export default function ScanPage() {
         #reader__dashboard { 
             position: relative !important;
             display: flex !important; 
+            visibility: visible !important;
+            opacity: 1 !important;
             flex-direction: column !important; 
             align-items: center !important; 
             padding: 20px 10px !important; 
             background: transparent !important;
             backdrop-filter: none !important;
-            z-index: 30 !important;
-            min-height: 80px !important;
+            z-index: 50 !important;
+            min-height: 100px !important;
+            width: 100% !important;
         }
         .dark #reader__dashboard {
-            background: rgba(0, 0, 0, 0.5) !important;
+            background: transparent !important;
         }
-        #reader__dashboard_section_csr button { 
+        #reader__dashboard_section_csr button,
+        #reader__dashboard_section_csr a,
+        #reader__dashboard button,
+        #reader__dashboard a { 
             width: auto !important; 
-            margin: 5px auto !important; 
-            font-size: 10px !important;
-            padding: 8px 16px !important;
+            margin: 10px auto !important; 
+            font-size: 11px !important;
+            padding: 12px 24px !important;
+            visibility: visible !important;
+            display: inline-block !important;
         }
         #reader__status_span {
             font-size: 10px !important;

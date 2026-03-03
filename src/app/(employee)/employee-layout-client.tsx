@@ -35,7 +35,7 @@ export default function EmployeeLayoutClient({ children }: { children: React.Rea
             </header>
 
             {/* Main Content Area */}
-            <main className={`flex-1 overflow-y-auto pb-20 p-4 ${pathname === "/scan" ? "overflow-hidden flex flex-col pt-2" : ""}`}>
+            <main className={`flex-1 overflow-y-auto pb-20 p-4 ${pathname === "/scan" ? "flex flex-col pt-2" : ""}`}>
                 {children}
             </main>
 
