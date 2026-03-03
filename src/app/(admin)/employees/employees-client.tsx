@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, Loader2, Search, UserPlus, Mail, Calendar as CalendarIcon, Shield, Pencil, KeyRound } from "lucide-react";
+import { Plus, Trash2, Loader2, Search, UserPlus, Mail, Calendar as CalendarIcon, Shield, Pencil, KeyRound, Lock } from "lucide-react";
 import { getEmployees, createEmployee, updateEmployee, deleteEmployee, resetPassword } from "./actions";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -25,6 +25,7 @@ export default function EmployeesPage() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Form edit
@@ -46,6 +47,14 @@ export default function EmployeesPage() {
 
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (password !== confirmPassword) {
+            alert("Password dan Konfirmasi Password tidak cocok!");
+            return;
+        }
+        if (password.length < 8) {
+            alert("Password minimal 8 karakter!");
+            return;
+        }
         setIsSubmitting(true);
         const res = await createEmployee({ name, email, password });
         setIsSubmitting(false);
@@ -55,6 +64,7 @@ export default function EmployeesPage() {
             setName("");
             setEmail("");
             setPassword("");
+            setConfirmPassword("");
             fetchEmployees();
         } else {
             alert(res.error);
@@ -137,8 +147,12 @@ export default function EmployeesPage() {
                                 <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="jane@kantor.com" className="bg-white/5 border-white/10 h-12 rounded-xl" />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="password" className="text-[10px] font-black uppercase tracking-widest opacity-50">Temporary Password</Label>
-                                <Input id="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Minimal 8 chars" className="bg-white/5 border-white/10 h-12 rounded-xl" />
+                                <Label htmlFor="password" className="text-[10px] font-black uppercase tracking-widest opacity-50">Password</Label>
+                                <Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Minimal 8 karakter" className="bg-white/5 border-white/10 h-12 rounded-xl" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="confirmPassword" className="text-[10px] font-black uppercase tracking-widest opacity-50">Konfirmasi Password</Label>
+                                <Input id="confirmPassword" type="password" required minLength={8} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Ulangi password" className="bg-white/5 border-white/10 h-12 rounded-xl" />
                             </div>
                             <DialogFooter className="gap-2 sm:gap-0">
                                 <Button type="button" variant="ghost" onClick={() => setIsAddOpen(false)} className="font-bold">BATAL</Button>

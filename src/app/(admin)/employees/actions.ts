@@ -11,29 +11,41 @@ export async function getEmployees() {
 }
 
 export async function createEmployee(data: { name: string; email: string; password?: string }) {
-    // Gunakan auth api untuk mendaftarkan user baru
-    // Karena kita di server, kita tidak bisa langsung menggunakan signUp dari client.
-    // Tapi kita bisa langsung insert ke database jika hanya butuh data dasar,
-    // namun sebaiknya pakai betterAuth API untuk hashing password dll.
-
     try {
         const password = data.password || "password123";
-        const res = await auth.api.signUpEmail({
-            body: {
+        const baseUrl = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+
+        // Use HTTP fetch to call the auth sign-up endpoint
+        const response = await fetch(`${baseUrl}/api/auth/sign-up/email`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Origin": baseUrl,
+                "Referer": baseUrl,
+            },
+            body: JSON.stringify({
                 email: data.email,
                 password: password,
                 name: data.name,
-            }
+            }),
         });
 
-        if (res?.user) {
-            // pastikan role EMPLOYEE
-            await db.update(user).set({ role: "EMPLOYEE" }).where(eq(user.id, res.user.id!));
+        const result = await response.json();
+
+        if (!response.ok) {
+            console.error("Auth signup error:", result);
+            return { success: false, error: result?.message || result?.error || "Gagal membuat akun karyawan" };
+        }
+
+        if (result?.user?.id) {
+            // Set role to EMPLOYEE
+            await db.update(user).set({ role: "EMPLOYEE" }).where(eq(user.id, result.user.id));
         }
 
         revalidatePath("/employees");
         return { success: true };
     } catch (error: any) {
+        console.error("Create employee error:", error);
         return { success: false, error: error.message || "Gagal membuat karyawan" };
     }
 }
