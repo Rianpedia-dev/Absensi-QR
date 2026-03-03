@@ -24,5 +24,5 @@ export const auth = betterAuth({
             },
         },
     },
-    plugins: [nextCookies(), admin()]
+    plugins: [nextCookies(), admin({ adminRoles: ["ADMIN"] })]
 });

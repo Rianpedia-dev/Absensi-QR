@@ -66,15 +66,36 @@ export async function updateEmployee(id: string, data: { name: string; email: st
 
 export async function resetPassword(id: string) {
     try {
-        await auth.api.setUserPassword({
-            body: {
+        const baseUrl = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+        const { cookies } = await import("next/headers");
+        const cookieStore = await cookies();
+        const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join("; ");
+
+        const response = await fetch(`${baseUrl}/api/auth/admin/set-user-password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Origin": baseUrl,
+                "Referer": baseUrl,
+                "Cookie": cookieHeader,
+            },
+            body: JSON.stringify({
                 userId: id,
                 newPassword: "karyawanpassword",
-            },
+            }),
         });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            console.error("Reset password error:", result);
+            return { success: false, error: result?.message || "Gagal mereset password" };
+        }
+
         revalidatePath("/employees");
         return { success: true };
     } catch (error: any) {
+        console.error("Reset password error:", error);
         return { success: false, error: error.message || "Gagal mereset password" };
     }
 }
