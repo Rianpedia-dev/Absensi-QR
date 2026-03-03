@@ -87,7 +87,7 @@ export default function ScanPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-full w-full max-w-sm mx-auto overflow-hidden animate-in-fade">
+        <div className="flex flex-col items-center justify-center h-full w-full max-w-sm mx-auto animate-in-fade">
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -102,7 +102,7 @@ export default function ScanPage() {
                 </p>
             </motion.div>
 
-            <Card className="w-full max-w-sm glass-card overflow-hidden border-0 shadow-2xl relative">
+            <Card className="w-full max-w-sm glass-card border-0 shadow-2xl relative">
                 <CardContent className="p-0 flex flex-col items-center">
 
                     <AnimatePresence>
@@ -232,18 +232,21 @@ export default function ScanPage() {
             <style dangerouslySetInnerHTML={{
                 __html: `
         #reader button {
-            background-color: hsl(var(--secondary));
-            color: hsl(var(--secondary-foreground));
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            border: 1px solid hsl(var(--border));
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.65rem;
-            margin-top: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            background-color: hsl(var(--primary)) !important;
+            color: hsl(var(--primary-foreground)) !important;
+            padding: 0.85rem 2rem !important;
+            border-radius: 0.75rem !important;
+            border: none !important;
+            font-weight: 900 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.15em !important;
+            font-size: 0.75rem !important;
+            margin: 1rem auto !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 4px 12px rgba(var(--primary), 0.3) !important;
+            display: block !important;
+            width: fit-content !important;
         }
         #reader button:hover {
             opacity: 0.8;
@@ -273,10 +276,11 @@ export default function ScanPage() {
             display: flex !important; 
             flex-direction: column !important; 
             align-items: center !important; 
-            padding: 10px !important; 
+            padding: 20px 10px !important; 
             background: transparent !important;
             backdrop-filter: none !important;
             z-index: 30 !important;
+            min-height: 80px !important;
         }
         .dark #reader__dashboard {
             background: rgba(0, 0, 0, 0.5) !important;
@@ -292,14 +296,19 @@ export default function ScanPage() {
             font-weight: 700 !important;
             text-transform: uppercase !important;
         }
-        /* Hide only camera selection text and dropdown, keep buttons */
+        /* Ensure buttons are visible, hide only selection text and dropdown */
         #reader__dashboard_section_csr {
             display: flex !important;
             flex-direction: column !important;
+            align-items: center !important;
+            width: 100% !important;
         }
         #reader__dashboard_section_csr > span, 
         #reader__dashboard_section_csr > select { 
             display: none !important; 
+        }
+        #reader__dashboard_section_csr button {
+            order: 1 !important;
         }
       `}} />
         </div>
