@@ -86,6 +86,14 @@ export default function ScanPage() {
         setScanResult(null);
     };
 
+    const stopScanner = () => {
+        if (scannerRef.current) {
+            scannerRef.current.clear().catch(e => console.error("Failed to clear scanner", e));
+            scannerRef.current = null;
+            setIsScanning(false);
+        }
+    };
+
     return (
         <div className="flex flex-col items-center justify-start min-h-full w-full max-w-sm mx-auto animate-in-fade pb-10">
             <motion.div
@@ -123,41 +131,56 @@ export default function ScanPage() {
                     </AnimatePresence>
 
                     {!scanResult ? (
-                        <div className="w-full relative bg-zinc-100 dark:bg-zinc-800/50">
-                            <div id="reader" className="w-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full" />
+                        <>
+                            <div className="w-full relative bg-zinc-100 dark:bg-zinc-800/50">
+                                <div id="reader" className="w-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full" />
 
-                            {/* Professional Scan Overlay with Spotlight Effect */}
-                            <div className="absolute top-0 left-0 w-full aspect-square z-20 pointer-events-none">
-                                {/* Darkened Backdrop with Hole (Spotlight) */}
-                                <div className="absolute inset-0 bg-black/40" style={{ clipPath: 'polygon(0% 0%, 0% 100%, calc(50% - 130px) 100%, calc(50% - 130px) calc(50% - 130px), calc(50% + 130px) calc(50% - 130px), calc(50% + 130px) calc(50% + 130px), calc(50% - 130px) calc(50% + 130px), calc(50% - 130px) 100%, 100% 100%, 100% 0%)' }} />
+                                {/* Professional Scan Overlay with Spotlight Effect */}
+                                <div className="absolute top-0 left-0 w-full aspect-square z-20 pointer-events-none">
+                                    {/* Darkened Backdrop with Hole (Spotlight) */}
+                                    <div className="absolute inset-0 bg-black/40" style={{ clipPath: 'polygon(0% 0%, 0% 100%, calc(50% - 130px) 100%, calc(50% - 130px) calc(50% - 130px), calc(50% + 130px) calc(50% - 130px), calc(50% + 130px) calc(50% + 130px), calc(50% - 130px) calc(50% + 130px), calc(50% - 130px) 100%, 100% 100%, 100% 0%)' }} />
 
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="relative w-[260px] h-[260px]">
-                                        {/* Corners - Refined Blue Style (Matching QR Box Exactly) */}
-                                        <div className="absolute top-0 left-0 w-12 h-12 border-t-[6px] border-l-[6px] border-primary rounded-tl-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
-                                        <div className="absolute top-0 right-0 w-12 h-12 border-t-[6px] border-r-[6px] border-primary rounded-tr-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
-                                        <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[6px] border-l-[6px] border-primary rounded-bl-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
-                                        <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[6px] border-r-[6px] border-primary rounded-br-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="relative w-[260px] h-[260px]">
+                                            {/* Corners - Refined Blue Style (Matching QR Box Exactly) */}
+                                            <div className="absolute top-0 left-0 w-12 h-12 border-t-[6px] border-l-[6px] border-primary rounded-tl-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+                                            <div className="absolute top-0 right-0 w-12 h-12 border-t-[6px] border-r-[6px] border-primary rounded-tr-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+                                            <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[6px] border-l-[6px] border-primary rounded-bl-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
+                                            <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[6px] border-r-[6px] border-primary rounded-br-3xl shadow-[0_0_20px_rgba(var(--primary),0.5)]" />
 
-                                        {/* Scanning Bar */}
-                                        <motion.div
-                                            animate={{ top: ['8%', '92%', '8%'] }}
-                                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                            className="absolute left-[4%] right-[4%] h-[4px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_#6366f1] rounded-full"
-                                        />
+                                            {/* Scanning Bar */}
+                                            <motion.div
+                                                animate={{ top: ['8%', '92%', '8%'] }}
+                                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                                className="absolute left-[4%] right-[4%] h-[4px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_#6366f1] rounded-full"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {!isScanning && !loading && (
-                                <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-muted/20 z-10">
-                                    <Camera className="w-10 h-10 text-muted-foreground/30 animate-pulse" />
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-4 opacity-50 italic">
-                                        Mengaktifkan Kamera...
-                                    </p>
+                                {!isScanning && !loading && (
+                                    <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-muted/20 z-10">
+                                        <Camera className="w-10 h-10 text-muted-foreground/30 animate-pulse" />
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-4 opacity-50 italic">
+                                            Mengaktifkan Kamera...
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                            {/* Custom Stop Button - Always visible below camera */}
+                            {isScanning && (
+                                <div className="w-full flex justify-center py-4 px-4">
+                                    <Button
+                                        onClick={stopScanner}
+                                        variant="outline"
+                                        className="w-full font-black uppercase tracking-[0.15em] rounded-xl h-12 text-xs border-2 border-destructive/30 text-destructive hover:bg-destructive hover:text-white transition-all"
+                                    >
+                                        <X className="w-4 h-4 mr-2" />
+                                        Stop Scanning
+                                    </Button>
                                 </div>
                             )}
-                        </div>
+                        </>
                     ) : (
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -231,32 +254,11 @@ export default function ScanPage() {
 
             <style dangerouslySetInnerHTML={{
                 __html: `
-        #reader button, #reader a {
-            background-color: hsl(var(--primary)) !important;
-            color: hsl(var(--primary-foreground)) !important;
-            padding: 0.85rem 2rem !important;
-            border-radius: 0.75rem !important;
-            border: none !important;
-            font-weight: 900 !important;
-            text-transform: uppercase !important;
-            letter-spacing: 0.15em !important;
-            font-size: 0.75rem !important;
-            margin: 1rem auto !important;
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            box-shadow: 0 4px 12px rgba(var(--primary), 0.3) !important;
-            display: inline-block !important;
-            width: fit-content !important;
-            text-decoration: none !important;
-        }
-        #reader button:hover, #reader a:hover {
-            opacity: 0.9 !important;
-            transform: scale(0.98) !important;
-        }
-        /* Hide only the scanner credit link */
-        #reader > div > span > a { display: none !important; }
+        /* Hide ALL library UI - we use custom React buttons instead */
         #reader { border: none !important; background: transparent !important; width: 100% !important; }
-        #reader img { display: none !important; } /* Hide the helper images */
+        #reader a { display: none !important; }
+        #reader img { display: none !important; }
+        #reader__dashboard { display: none !important; }
         #reader__scan_region { 
             display: flex !important; 
             justify-content: center !important; 
@@ -272,57 +274,7 @@ export default function ScanPage() {
             height: 100% !important;
             object-fit: cover !important;
         }
-        #reader__scan_region svg { display: none !important; }  /* Aggregate SVG removal */
-        #reader__dashboard { 
-            position: relative !important;
-            display: flex !important; 
-            visibility: visible !important;
-            opacity: 1 !important;
-            flex-direction: column !important; 
-            align-items: center !important; 
-            padding: 20px 10px !important; 
-            background: transparent !important;
-            backdrop-filter: none !important;
-            z-index: 50 !important;
-            min-height: 100px !important;
-            width: 100% !important;
-        }
-        .dark #reader__dashboard {
-            background: transparent !important;
-        }
-        #reader__dashboard_section_csr button,
-        #reader__dashboard_section_csr a,
-        #reader__dashboard button,
-        #reader__dashboard a { 
-            width: auto !important; 
-            margin: 10px auto !important; 
-            font-size: 11px !important;
-            padding: 12px 24px !important;
-            visibility: visible !important;
-            display: inline-block !important;
-        }
-        #reader__status_span {
-            font-size: 10px !important;
-            font-weight: 700 !important;
-            text-transform: uppercase !important;
-        }
-        /* Ensure buttons are visible, hide only selection text and dropdown */
-        #reader__dashboard_section_csr {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            width: 100% !important;
-        }
-        #reader__dashboard_section_csr > span, 
-        #reader__dashboard_section_csr > select { 
-            display: none !important; 
-        }
-        /* Style adjustments for when scanning is active */
-        #reader__dashboard_section_csr button,
-        #reader__dashboard_section_csr a {
-            order: 1 !important;
-            margin: 10px 0 !important;
-        }
+        #reader__scan_region svg { display: none !important; }
       `}} />
         </div>
     );
