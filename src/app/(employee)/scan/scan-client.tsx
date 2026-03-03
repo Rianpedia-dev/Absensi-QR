@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 import { useEffect, useRef, useState } from "react";
 import { Html5QrcodeScanner, Html5QrcodeScanType } from "html5-qrcode";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, AlertCircle, Loader2, Camera, ScanLine, X } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, Camera, ScanLine, X, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -14,11 +14,37 @@ export default function ScanPage() {
     const [isScanning, setIsScanning] = useState(false);
     const [isStopped, setIsStopped] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [cameraPermission, setCameraPermission] = useState<"granted" | "denied" | "prompt" | "checking">("checking");
     const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
+    // Check and request camera permission
+    const requestCameraPermission = async () => {
+        setCameraPermission("checking");
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            // Permission granted - stop the stream immediately (scanner will start its own)
+            stream.getTracks().forEach(track => track.stop());
+            setCameraPermission("granted");
+        } catch (err: any) {
+            console.error("Camera permission error:", err);
+            if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+                setCameraPermission("denied");
+            } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+                setCameraPermission("denied");
+            } else {
+                setCameraPermission("denied");
+            }
+        }
+    };
+
+    // Check permission on mount
     useEffect(() => {
-        // Start scanner only if no result is showing and not manually stopped
-        if (scanResult || isStopped) return;
+        requestCameraPermission();
+    }, []);
+
+    useEffect(() => {
+        // Start scanner only if permission granted, no result, and not manually stopped
+        if (cameraPermission !== "granted" || scanResult || isStopped) return;
 
         if (!scannerRef.current) {
             setIsScanning(true);
@@ -58,7 +84,7 @@ export default function ScanPage() {
                 scannerRef.current = null;
             }
         };
-    }, [scanResult, isStopped]);
+    }, [scanResult, isStopped, cameraPermission]);
 
     const handleQrData = async (data: string) => {
         setLoading(true);
@@ -164,7 +190,42 @@ export default function ScanPage() {
                                     </div>
                                 </div>
 
-                                {!isScanning && !loading && !isStopped && (
+                                {cameraPermission === "denied" && (
+                                    <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-background/90 backdrop-blur-sm z-30 px-8">
+                                        <div className="relative mb-4">
+                                            <div className="w-20 h-20 bg-amber-500/10 border-2 border-amber-500/20 rounded-full flex items-center justify-center">
+                                                <ShieldAlert className="w-10 h-10 text-amber-500" />
+                                            </div>
+                                        </div>
+                                        <h3 className="text-sm font-black uppercase tracking-widest text-amber-500 mb-2">Izin Kamera Diperlukan</h3>
+                                        <p className="text-[11px] text-muted-foreground text-center leading-relaxed mb-4">
+                                            Aplikasi memerlukan akses kamera untuk scan QR Code. Silakan izinkan akses kamera di pengaturan browser Anda.
+                                        </p>
+                                        <div className="text-[10px] text-muted-foreground/60 text-center space-y-1 mb-5 bg-white/5 border border-white/10 rounded-xl p-3 w-full">
+                                            <p className="font-bold uppercase tracking-wider opacity-70">Cara Mengaktifkan:</p>
+                                            <p>1. Tap ikon 🔒 di address bar</p>
+                                            <p>2. Pilih <strong>"Izin Situs"</strong> / <strong>"Permissions"</strong></p>
+                                            <p>3. Aktifkan <strong>"Kamera"</strong></p>
+                                            <p>4. Refresh halaman ini</p>
+                                        </div>
+                                        <Button
+                                            onClick={requestCameraPermission}
+                                            className="w-full font-black uppercase tracking-[0.15em] rounded-xl h-11 text-xs"
+                                        >
+                                            <Camera className="w-4 h-4 mr-2" />
+                                            Coba Izinkan Lagi
+                                        </Button>
+                                    </div>
+                                )}
+                                {cameraPermission === "checking" && (
+                                    <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm z-30">
+                                        <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">
+                                            Memeriksa izin kamera...
+                                        </p>
+                                    </div>
+                                )}
+                                {!isScanning && !loading && !isStopped && cameraPermission === "granted" && (
                                     <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-muted/20 z-10">
                                         <Camera className="w-10 h-10 text-muted-foreground/30 animate-pulse" />
                                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-4 opacity-50 italic">
