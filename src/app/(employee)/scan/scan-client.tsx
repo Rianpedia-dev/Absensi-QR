@@ -267,16 +267,13 @@ export default function ScanPage() {
         }
         #reader__scan_region svg { display: none !important; }  /* Aggregate SVG removal */
         #reader__dashboard { 
-            position: absolute !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
+            position: relative !important;
             display: flex !important; 
             flex-direction: column !important; 
             align-items: center !important; 
             padding: 10px !important; 
-            background: rgba(255, 255, 255, 0.8) !important; 
-            backdrop-filter: blur(4px) !important;
+            background: transparent !important;
+            backdrop-filter: none !important;
             z-index: 30 !important;
         }
         .dark #reader__dashboard {
@@ -292,6 +289,9 @@ export default function ScanPage() {
             font-size: 10px !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
+        }
+        #reader__dashboard_section_csr {
+            display: none !important;
         }
       `}} />
         </div>
