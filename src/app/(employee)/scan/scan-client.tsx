@@ -231,7 +231,7 @@ export default function ScanPage() {
 
             <style dangerouslySetInnerHTML={{
                 __html: `
-        #reader button {
+        #reader button, #reader a {
             background-color: hsl(var(--primary)) !important;
             color: hsl(var(--primary-foreground)) !important;
             padding: 0.85rem 2rem !important;
@@ -245,14 +245,16 @@ export default function ScanPage() {
             cursor: pointer !important;
             transition: all 0.2s ease !important;
             box-shadow: 0 4px 12px rgba(var(--primary), 0.3) !important;
-            display: block !important;
+            display: inline-block !important;
             width: fit-content !important;
+            text-decoration: none !important;
         }
-        #reader button:hover {
-            opacity: 0.8;
-            transform: scale(0.98);
+        #reader button:hover, #reader a:hover {
+            opacity: 0.9 !important;
+            transform: scale(0.98) !important;
         }
-        #reader a { display: none !important; }
+        /* Hide only the scanner credit link */
+        #reader > div > span > a { display: none !important; }
         #reader { border: none !important; background: transparent !important; width: 100% !important; }
         #reader img { display: none !important; } /* Hide the helper images */
         #reader__scan_region { 
@@ -307,8 +309,11 @@ export default function ScanPage() {
         #reader__dashboard_section_csr > select { 
             display: none !important; 
         }
-        #reader__dashboard_section_csr button {
+        /* Style adjustments for when scanning is active */
+        #reader__dashboard_section_csr button,
+        #reader__dashboard_section_csr a {
             order: 1 !important;
+            margin: 10px 0 !important;
         }
       `}} />
         </div>
