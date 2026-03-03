@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, QrCode, Mail, Lock, ArrowRight } from "lucide-react";
+import { Loader2, QrCode, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginClient() {
@@ -15,6 +15,7 @@ export default function LoginClient() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -92,14 +93,24 @@ export default function LoginClient() {
                                 <Label htmlFor="password" title="password-label" className="text-[10px] font-black uppercase tracking-widest opacity-50 flex items-center gap-2">
                                     <Lock className="w-3 h-3" /> User Password
                                 </Label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="h-12 rounded-xl bg-black/[0.03] dark:bg-white/5 border-black/[0.08] dark:border-white/10 focus:ring-primary/20"
-                                />
+                                <div className="relative">
+                                    <Input
+                                        id="password"
+                                        type={showPassword ? "text" : "password"}
+                                        required
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="h-12 rounded-xl bg-black/[0.03] dark:bg-white/5 border-black/[0.08] dark:border-white/10 focus:ring-primary/20 pr-12"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10"
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                </div>
                             </div>
 
                             <AnimatePresence>
