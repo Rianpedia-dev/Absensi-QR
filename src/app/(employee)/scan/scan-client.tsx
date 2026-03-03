@@ -123,11 +123,11 @@ export default function ScanPage() {
                     </AnimatePresence>
 
                     {!scanResult ? (
-                        <div className="w-full aspect-square relative bg-zinc-100 dark:bg-zinc-800/50 overflow-hidden">
-                            <div id="reader" className="absolute inset-0 w-full h-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full" />
+                        <div className="w-full relative bg-zinc-100 dark:bg-zinc-800/50">
+                            <div id="reader" className="w-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full" />
 
                             {/* Professional Scan Overlay with Spotlight Effect */}
-                            <div className="absolute inset-0 z-20 pointer-events-none">
+                            <div className="absolute top-0 left-0 w-full aspect-square z-20 pointer-events-none">
                                 {/* Darkened Backdrop with Hole (Spotlight) */}
                                 <div className="absolute inset-0 bg-black/40" style={{ clipPath: 'polygon(0% 0%, 0% 100%, calc(50% - 130px) 100%, calc(50% - 130px) calc(50% - 130px), calc(50% + 130px) calc(50% - 130px), calc(50% + 130px) calc(50% + 130px), calc(50% - 130px) calc(50% + 130px), calc(50% - 130px) 100%, 100% 100%, 100% 0%)' }} />
 
@@ -150,7 +150,7 @@ export default function ScanPage() {
                             </div>
 
                             {!isScanning && !loading && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/20">
+                                <div className="absolute top-0 left-0 w-full aspect-square flex flex-col items-center justify-center bg-muted/20 z-10">
                                     <Camera className="w-10 h-10 text-muted-foreground/30 animate-pulse" />
                                     <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-4 opacity-50 italic">
                                         Mengaktifkan Kamera...
@@ -256,8 +256,10 @@ export default function ScanPage() {
             display: flex !important; 
             justify-content: center !important; 
             align-items: center !important;
-            position: absolute !important; 
-            inset: 0 !important;
+            width: 100% !important;
+            aspect-ratio: 1 / 1 !important;
+            overflow: hidden !important;
+            position: relative !important; 
             border: none !important; 
         }
         #reader__scan_region video {
