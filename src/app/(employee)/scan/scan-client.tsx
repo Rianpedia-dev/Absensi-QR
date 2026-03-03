@@ -138,7 +138,7 @@ export default function ScanPage() {
 
                     {!scanResult ? (
                         <>
-                            <div className="w-full relative bg-zinc-100 dark:bg-zinc-800/50">
+                            <div className="w-full relative bg-zinc-100 dark:bg-zinc-800/50 aspect-square">
                                 <div id="reader" className="w-full [&_video]:object-cover [&_video]:w-full [&_video]:h-full" />
 
                                 {/* Professional Scan Overlay with Spotlight Effect */}
