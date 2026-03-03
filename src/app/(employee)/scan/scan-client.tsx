@@ -250,7 +250,7 @@ export default function ScanPage() {
             transform: scale(0.98);
         }
         #reader a { display: none !important; }
-        #reader { border: none !important; background: transparent !important; overflow: hidden !important; width: 100% !important; height: 100% !important; }
+        #reader { border: none !important; background: transparent !important; width: 100% !important; }
         #reader img { display: none !important; } /* Hide the helper images */
         #reader__scan_region { 
             display: flex !important; 
@@ -292,8 +292,14 @@ export default function ScanPage() {
             font-weight: 700 !important;
             text-transform: uppercase !important;
         }
+        /* Hide only camera selection text and dropdown, keep buttons */
         #reader__dashboard_section_csr {
-            display: none !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        #reader__dashboard_section_csr > span, 
+        #reader__dashboard_section_csr > select { 
+            display: none !important; 
         }
       `}} />
         </div>
