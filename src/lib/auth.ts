@@ -24,5 +24,9 @@ export const auth = betterAuth({
             },
         },
     },
-    plugins: [nextCookies(), admin({ adminRoles: ["ADMIN"] })]
+    plugins: [nextCookies(), admin({ adminRoles: ["ADMIN"] })],
+    trustedOrigins: [
+        "https://absensi-karyawan-three.vercel.app",
+        "http://localhost:3000"
+    ]
 });
