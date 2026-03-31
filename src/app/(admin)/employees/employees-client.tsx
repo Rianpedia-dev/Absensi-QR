@@ -231,7 +231,7 @@ export default function EmployeesPage() {
                                     <TableHead className="py-4 font-black uppercase text-[10px] tracking-widest">Identitas</TableHead>
                                     <TableHead className="py-4 font-black uppercase text-[10px] tracking-widest">Kontak</TableHead>
                                     <TableHead className="py-4 font-black uppercase text-[10px] tracking-widest">Tanggal Registrasi</TableHead>
-                                    <TableHead className="py-4 font-black uppercase text-[10px] tracking-widest text-right">Manajemen</TableHead>
+                                    <TableHead className="py-4 font-black uppercase text-[10px] tracking-widest text-right">Aksi</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
