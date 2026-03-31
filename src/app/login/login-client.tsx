@@ -82,7 +82,7 @@ export default function LoginClient() {
                                 <Input
                                     id="email"
                                     type="email"
-                                    placeholder="admin@kantor.com"
+                                    placeholder=""
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
