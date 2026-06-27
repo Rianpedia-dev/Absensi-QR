@@ -12,6 +12,21 @@ async function main() {
         const accounts = await db.select().from(account);
         console.log(`Found ${accounts.length} accounts:`);
         console.log(JSON.stringify(accounts, null, 2));
+
+        const { attendances } = await import("../lib/db/schema");
+        console.log("\nChecking attendances table...");
+        const att = await db.select().from(attendances);
+        console.log(`Found ${att.length} attendances:`);
+
+        const joko = users.find(u => u.email === "joko@gmail.com");
+        if (joko) {
+            console.log(`Joko found: ${joko.id}`);
+            const jokoAtt = att.filter(a => a.userId === joko.id);
+            console.log(`Joko has ${jokoAtt.length} attendances`);
+            console.log(JSON.stringify(jokoAtt, null, 2));
+        } else {
+            console.log("Joko not found!");
+        }
     } catch (error) {
         console.error("Error during DB check:", error);
     } finally {

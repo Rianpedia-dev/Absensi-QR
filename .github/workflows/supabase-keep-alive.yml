@@ -2,8 +2,8 @@ name: Supabase Keep Alive
 
 on:
   schedule:
-    # Berjalan otomatis setiap 3 hari sekali pada jam 00:00 UTC
-    - cron: '0 0 */3 * *' 
+    # Berjalan otomatis setiap hari sekali pada jam 00:00 UTC
+    - cron: '0 0 * * *' 
   workflow_dispatch: 
     # Menambahkan ini agar Anda bisa mengetesnya secara manual kapan saja
 
@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: Ping Supabase API
         run: |
-          curl -X GET '${{ secrets.SUPABASE_URL }}/rest/v1/user?select=*&limit=1' \
+          echo "Memulai ping ke Supabase API..."
+          curl -sS --fail -X GET '${{ secrets.SUPABASE_URL }}/rest/v1/user?select=*&limit=1' \
           -H 'apikey: ${{ secrets.SUPABASE_ANON_KEY }}' \
           -H 'Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}'
+          echo -e "\nPing berhasil! Proyek Supabase tetap aktif."
+
